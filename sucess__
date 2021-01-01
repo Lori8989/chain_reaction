@@ -1,0 +1,300 @@
+#include <iostream>
+#include <stdlib.h>
+#include <time.h>
+#include "../include/algorithm.h"
+
+using namespace std;
+
+/******************************************************
+ * In your algorithm, you can just use the the funcitons
+ * listed by TA to get the board information.(functions 
+ * 1. ~ 4. are listed in next block)
+ * 
+ * The STL library functions is not allowed to use.
+******************************************************/
+
+/*************************************************************************
+ * 1. int board.get_orbs_num(int row_index, int col_index)
+ * 1. The function that return the number of orbs in cell(row, col)
+ * 
+ * 2. int board.get_capacity(int row_index, int col_index)
+ * 2. The function that return the orb capacity of the cell(row, col)
+ * 
+ * 3. char board.get_cell_color(int row_index, int col_index)
+ * 3. The function that return the color fo the cell(row, col)
+ * 
+ * 4. void board.print_current_board(int row_index, int col_index, int round)
+ * 4. The function that print out the current board statement
+*************************************************************************/
+
+int explode_point(Board board, int center_color, int pos_r, int pos_c) {
+    //if the cell explodes will not contagious other cell (as besides are same color)
+    // -points
+    int val = 0;
+    if (pos_r == 0 && pos_c == 0) {
+        if (board.get_cell_color(pos_r + 1, pos_c) == center_color)
+            val += 50;
+        if (board.get_cell_color(pos_r, pos_c + 1) == center_color)
+            val += 50;
+        if (board.get_cell_color(pos_r + 1, pos_c + 1) == center_color)
+            val += 50;
+        val = 0 - val;
+        return val;
+    }
+    if (pos_r == 0 && pos_c == 5) {
+        if (board.get_cell_color(pos_r + 1, pos_c) == center_color)
+            val += 50;
+        if (board.get_cell_color(pos_r, pos_c - 1) == center_color)
+            val += 50;
+        if (board.get_cell_color(pos_r + 1, pos_c - 1) == center_color)
+            val += 50;
+        val = 0 - val;
+        return val;
+    }
+    if (pos_r == 4 && pos_c == 0) {
+        if (board.get_cell_color(pos_r - 1, pos_c) == center_color)
+            val += 50;
+        if (board.get_cell_color(pos_r, pos_c + 1) == center_color)
+            val += 50;
+        if (board.get_cell_color(pos_r - 1, pos_c + 1) == center_color)
+            val += 50;
+        val = 0 - val;
+        return val;
+    }
+    if (pos_r == 4 && pos_c == 5) {
+        if (board.get_cell_color(pos_r - 1, pos_c) == center_color)
+            val += 50;
+        if (board.get_cell_color(pos_r, pos_c - 1) == center_color)
+            val += 50;
+        if (board.get_cell_color(pos_r - 1, pos_c - 1) == center_color)
+            val += 50;
+        val = 0 - val;
+        return val;
+    }
+    //5
+    if (pos_r == 0) {
+        if (board.get_cell_color(pos_r, pos_c - 1) == center_color)
+            val += 30;
+        if (board.get_cell_color(pos_r, pos_c + 1) == center_color)
+            val += 30;
+        if (board.get_cell_color(pos_r + 1, pos_c - 1) == center_color)
+            val += 30;
+        if (board.get_cell_color(pos_r + 1, pos_c) == center_color)
+            val += 30;
+        if (board.get_cell_color(pos_r + 1, pos_c + 1) == center_color)
+            val += 30;
+        val = 0 - val;
+        return val;
+    }
+    if (pos_r == 4) {
+        if (board.get_cell_color(pos_r, pos_c - 1) == center_color)
+            val += 30;
+        if (board.get_cell_color(pos_r, pos_c + 1) == center_color)
+            val += 30;
+        if (board.get_cell_color(pos_r - 1, pos_c - 1) == center_color)
+            val += 30;
+        if (board.get_cell_color(pos_r - 1, pos_c) == center_color)
+            val += 30;
+        if (board.get_cell_color(pos_r - 1, pos_c + 1) == center_color)
+            val += 30;
+        val = 0 - val;
+        return val;
+    }
+    if (pos_c == 0) {
+        if (board.get_cell_color(pos_r - 1, pos_c) == center_color)
+            val += 30;
+        if (board.get_cell_color(pos_r + 1, pos_c) == center_color)
+            val += 30;
+        if (board.get_cell_color(pos_r - 1, pos_c + 1) == center_color)
+            val += 30;
+        if (board.get_cell_color(pos_r, pos_c + 1) == center_color)
+            val += 30;
+        if (board.get_cell_color(pos_r + 1, pos_c + 1) == center_color)
+            val += 30;
+        val = 0 - val;
+        return val;
+    }
+    if (pos_c == 5) {
+        if (board.get_cell_color(pos_r - 1, pos_c) == center_color)
+            val += 30;
+        if (board.get_cell_color(pos_r + 1, pos_c) == center_color)
+            val += 30;
+        if (board.get_cell_color(pos_r - 1, pos_c - 1) == center_color)
+            val += 30;
+        if (board.get_cell_color(pos_r, pos_c - 1) == center_color)
+            val += 30;
+        if (board.get_cell_color(pos_r + 1, pos_c - 1) == center_color)
+            val += 30;
+        val = 0 - val;
+        return val;
+    }
+    //8
+    else {
+        if (board.get_cell_color(pos_r + 1, pos_c + 1) == center_color)
+            val += 15;
+        if (board.get_cell_color(pos_r + 1, pos_c) == center_color)
+            val += 15;
+        if (board.get_cell_color(pos_r + 1, pos_c - 1) == center_color)
+            val += 15;
+        if (board.get_cell_color(pos_r - 1, pos_c + 1) == center_color)
+            val += 15;
+        if (board.get_cell_color(pos_r - 1, pos_c) == center_color)
+            val += 15;
+        if (board.get_cell_color(pos_r - 1, pos_c - 1) == center_color)
+            val += 15;
+        if (board.get_cell_color(pos_r, pos_c + 1) == center_color)
+            val += 15;
+        if (board.get_cell_color(pos_r, pos_c - 1) == center_color)
+            val += 15;
+        val = 0 - val;
+        return val;
+    }
+}
+
+int point_cal(Board board, int target_color) {
+    int val = 0;
+    //calculate the points
+    for (int r = 0; r < 5; r++) {
+        for (int c = 0; c < 6; c++) {
+            if (board.get_cell_color(r, c) == target_color) {
+                val += 200;//my color
+                int epld_pts = explode_point(board, target_color, r, c);
+                val = val + epld_pts;//beside has same color
+                int cur_num = board.get_orbs_num(r, c);
+                val += cur_num*2;
+                int cell_cap = board.get_capacity(r, c);
+                if (cell_cap == 3) {//corner
+                    val += 80;
+                    if (cur_num == 2) {
+                        val += 10;
+                        val += epld_pts;
+                    }
+                }
+                else if (cell_cap == 5) {
+                    val += 35;
+                    if (cur_num == 4) {
+                        val += 10;
+                        val += epld_pts;
+                    }
+                }
+                else {
+                    if (cur_num > 5) {
+                        val += 20;
+                        val += epld_pts;
+                    }
+                    if(cur_num == 7)
+                        val += epld_pts;
+                }
+            }
+            else if (board.get_cell_color(r, c) == 'w') {
+                //cout << ".";
+                val += 15;
+            }
+            else {//oppopent cell
+                val -= 200;
+                val -= explode_point(board, target_color, r, c);
+                int cur_num = board.get_orbs_num(r, c);
+                val -= cur_num;
+                int cell_cap = board.get_capacity(r, c);
+                if (cell_cap == 3) {
+                    val -= 50;
+                    if (cur_num == 2)
+                        val -= 20;
+                }
+                else if (cell_cap == 5) {
+                    val -= 5;
+                    if (cur_num == 4)
+                        val -= 50;
+                }
+                else {
+                    if (cur_num == 7)
+                        val -= 90;
+                }
+            }
+        }
+    }
+    //cout <<" total:" <<val << endl;
+    return val;
+}
+
+int get_next(int player_color) {
+    if (player_color == RED)
+        return BLUE;
+    else
+        return RED;
+}
+int minimax(Board board, int depth, Player cur_player, int alpha, int beta, int my_color) {
+    int cur_color = cur_player.get_color();
+    if (depth == 0)//base case
+        return point_cal(board,cur_color);
+    if (cur_color == my_color) {//my turn
+        //cout << "!!!\n";
+        int bestval = -99999;
+        for (int pos_r = 0; pos_r < 5;pos_r++) {
+            for (int pos_c = 0; pos_c < 6; pos_c++) {
+                if (board.get_cell_color(pos_r, pos_c) == get_next(cur_color))
+                    continue;//can't place orb here
+                Board nw_board;
+                nw_board = board;
+                nw_board.place_orb(pos_r, pos_c, &cur_player);//board with new orb
+                Player nxt_player(get_next(cur_color));
+                int val = minimax(nw_board, depth - 1, nxt_player, alpha, beta, my_color);
+                bestval = max(bestval, val);//take max
+                alpha = max(alpha, bestval);//prune
+                if (beta <= alpha) break;
+            }
+        }
+        return bestval;
+    }
+    else {
+        int bestval = 99999;
+        for (int pos_r = 0; pos_r < 5; pos_r++) {
+            for (int pos_c = 0; pos_c < 6; pos_c++) {
+                if (board.get_cell_color(pos_r, pos_c) == my_color)
+                    continue;
+                Board nw_board;
+                nw_board = board;
+                nw_board.place_orb(pos_r, pos_c, &cur_player);
+                Player nxt_player(my_color);
+                int val = minimax(nw_board, depth - 1, nxt_player, alpha, beta, my_color);
+                bestval = min(bestval, val);
+                beta = min(beta, bestval);
+                if (beta <= alpha) break;
+            }
+        }
+        return bestval;
+    }
+
+}
+
+void algorithm_A(Board board, Player player, int index[]) {
+ 
+    cout << "my: ";   
+    srand(time(NULL) * time(NULL));
+    int max_pts = -9999;
+    int color = player.get_color();
+    if (color == RED)
+        cout << "red----\n";
+    else
+        cout << "blue!!!!";
+
+    for (int r = 0; r < 5; r++) {
+        for (int c = 0; c < 6; c++) {
+            if (board.get_cell_color(r, c) == get_next(color))
+                continue;
+            Board nw_board;
+            nw_board = board;
+            nw_board.place_orb(r, c, &player);
+            int nw_pts = minimax(nw_board, 4, player, -3000, 3000, color);
+            if (max_pts < nw_pts) {
+                index[0] = r;
+                index[1] = c;
+                max_pts = nw_pts;
+            }
+        }
+    }
+    cout << '(' << index[0] << ',' << index[1] << ')' << endl;
+}
+
+//g++ chain_reaction.cpp board.cpp rules.cpp player.cpp algorithm_ST.cpp algorithm_TA.cpp
+//.\a.exe
