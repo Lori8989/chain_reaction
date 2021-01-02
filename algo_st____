@@ -161,7 +161,7 @@ int point_cal(Board board, int target_color) {
                 int epld_pts = explode_point(board, target_color, r, c);
                 val = val + epld_pts;//beside has same color
                 int cur_num = board.get_orbs_num(r, c);
-                val += cur_num*2;
+                val += cur_num*5;
                 int cell_cap = board.get_capacity(r, c);
                 if (cell_cap == 3) {//corner
                     val += 30;
@@ -186,10 +186,7 @@ int point_cal(Board board, int target_color) {
                         val += epld_pts;
                 }
             }
-            else if (board.get_cell_color(r, c) == 'w') {
-                val += 15;
-            }
-            else {//oppopent cell
+            else if (board.get_cell_color(r, c) != 'w') {//oppopent cell
                 val -= 200;
                 val -= explode_point(board, target_color, r, c);
                 int cur_num = board.get_orbs_num(r, c);
@@ -278,7 +275,7 @@ void algorithm_A(Board board, Player player, int index[]) {
             Board nw_board;
             nw_board = board;
             nw_board.place_orb(r, c, &player);
-            int nw_pts = minimax(nw_board, 4, player, -3000, 3000, color);
+            int nw_pts = minimax(nw_board, 4, player, -5000, 6000, color);
             if (max_pts < nw_pts) {
                 index[0] = r;
                 index[1] = c;
